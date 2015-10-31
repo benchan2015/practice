@@ -1,0 +1,77 @@
+<html>
+
+<head>
+    <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+    <title>在规定时间内加结束</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta charset='utf-8' />
+    <link href="index.css" rel="stylesheet" />
+</head>
+
+<body>
+    <h1>在规定时间内加结束</h1>
+    <div id='div2'>
+        <div class="test" v-text="number"></div>
+    </div>
+    <select id='selectSpeed'>
+        <option>change speed</option>
+        <option>10000</option>
+        <option>5000</option>
+        <option>2000</option>
+        <option>1000</option>
+        <option>500</option>
+    </select>
+    <script src='../javascripts/vue.min.js'></script>
+    <script src='../javascripts/jquery.min.js'></script>
+    <script>
+    var vm = new Vue({
+        el: '#div2',
+        data: {
+            number2: 505,
+            number: 0,
+        }
+    })
+
+    vm.$watch('number', function(val) {
+        this.number = val
+    })
+    var isFinish = false;
+
+    function add(totalTime) {
+        isFinish = false;
+        //要做多少次
+        var count = totalTime / 20;
+        //每次加多少
+        var add = parseFloat(vm.number2 / count);
+        var c = setInterval(function() {
+            if (!vm.number) {
+                vm.number = 0;
+            }
+            //var add=Math.random()*10; 
+            // var add = 1;
+            var temp = vm.number;
+            temp += add;
+            //console.log(temp)
+            temp = Math.round(temp * 100) / 100;
+            //console.log('ccccccc:'+temp)
+            vm.number = temp;
+
+            if (vm.number + 1 >= vm.number2) {
+                vm.number = vm.number2;
+                isFinish = true;
+                clearInterval(c);
+            }
+
+        }, 20)
+    }
+    add(1000)
+    $('#selectSpeed').change(function() {
+        if (isFinish === true && $('#selectSpeed').val() !== 'change speed') {
+            vm.number = 0;
+            add($('#selectSpeed').val())
+        }
+    })
+    </script>
+</body>
+
+</html>

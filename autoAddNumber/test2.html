@@ -1,0 +1,60 @@
+<html>
+
+<head>
+    <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+    <meta charset='utf-8' />
+    <title>每一位同时加</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <link href="index.css" rel="stylesheet" />
+</head>
+
+<body>
+    <h1>每一位同时加</h1>
+    <div id='div1'>
+        <div class="test"></div>
+    </div>
+    <div id='div2'>
+        <span value=6>0</span><span value=5>0</span><span value=7>0</span><span value=4>0</span><span value=2>0</span>
+    </div>
+    <select id='selectSpeed' onchange='changeSpeed'>
+        <option>change speed</option>
+        <option>20</option>
+        <option>50</option>
+        <option>100</option>
+        <option>200</option>
+        <option>300</option>
+    </select>
+    <script src='../javascripts/jquery.min.js'></script>
+    <script>
+    var isFinish = false;
+
+    function add2(speed) {
+        isFinish = false;
+        var div2 = $('#div2');
+        div2.find('span').each(function() {
+            var self = $(this);
+            var i = 0;
+            var c = setInterval(function() {
+                i++;
+                self.html(i);
+                if (i >= self.attr('value')) {
+                    clearInterval(c);
+                    isFinish = true;
+                }
+            }, speed)
+        })
+
+
+    }
+    add2(50)
+    $('#selectSpeed').change(function() {
+        if (isFinish === true && $('#selectSpeed').val() != 'change speed') {
+            $('#div2').find('span[value!="."]').html(0);
+            add2($('#selectSpeed').val())
+        }
+
+    })
+    </script>
+</body>
+
+</html>

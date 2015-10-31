@@ -1,0 +1,83 @@
+<html>
+
+<head>
+    <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+    <title>每一位分开加</title>
+    <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+ <link href="index.css" rel="stylesheet"  />
+
+</head>
+
+<body>
+<h1>每一位分开加</h1>
+    <div id='div1'>
+        <div class="test"></div>
+    </div>
+    <div id='div2'>
+        <span value=6>0</span><span value=5>0</span><span value=7>0</span><span value=.>.</span><span value=4>0</span><span value=2>0</span>
+    </div>
+    <select id='selectSpeed'>
+        <option>change speed</option>
+        <option>20</option>
+        <option>50</option>
+        <option>100</option>
+        <option>200</option>
+        <option>300</option>
+    </select>
+    <script src='../javascripts/jquery.min.js'></script>
+    <script>
+    var animate = function(obj, stepTime) {
+        this.obj = obj;
+        this.stepTime = stepTime;
+    }
+    var isFinish = false;
+    animate.prototype.add = function() {
+            var i = 0;
+            var self = this;
+            var c = setInterval(function() {
+                i++;
+                self.obj.html(i);
+                if (i >= self.obj.attr('value')) {
+                    clearInterval(c);
+
+                }
+            }, self.stepTime)
+        }
+        // new animate($('#div2').find('span:eq(2)')).add();
+
+    var changeNumber = function(list, speed) {
+        this.list = list;
+        this.count = this.list ? this.list.length ? this.list.length : 0 : 0;
+        this.currentIndex = 0;
+        this.addStepTime = speed;
+        this.timespan = 0;
+    }
+    changeNumber.prototype.begin = function() {
+        isFinish = false;
+        var self = this;
+
+        setTimeout(function() {
+            if (--self.count < 0) {
+                isFinish = true;
+                return;
+            }
+            var currentObj = $(self.list[self.count]);
+            self.timespan = currentObj.attr('value') * self.addStepTime;
+            //console.log(self.timespan)
+            new animate(currentObj, self.addStepTime).add();
+            self.begin();
+        }, self.timespan);
+    }
+    new changeNumber($('#div2').find('span[value!="."]'), 30).begin();
+
+    $('#selectSpeed').change(function() {
+        if (isFinish === true&&$('#selectSpeed').val()!='change speed') {
+            $('#div2').find('span[value!="."]').html(0);
+            new changeNumber($('#div2').find('span[value!="."]'), $('#selectSpeed').val()).begin();
+        }
+    })
+    </script>
+</body>
+
+</html>
